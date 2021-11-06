@@ -5,7 +5,7 @@ const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_
   restRequestTimeout: 0
 });
 const prefix = '.'
-var rpsm, botchoice, userchoice;
+var rpsm, botchoice, userchoice, orginalid, session = false;
 var emojis =[
   '🗿',
   '📄',
@@ -25,8 +25,7 @@ client.on('messageCreate', message => {
 });
 
 client.on('messageReactionAdd', (reaction, user) =>{
-  if(user.bot) return;
-  if(reaction.message.id != rpsm) return;
+  if(!session || user.bot || reaction.message.id != rpsm || user.id != orginalid) return
   let userchoice;
   //fogive me js ive done a bad
   if(reaction.emoji.name == '🗿'){
@@ -41,11 +40,12 @@ client.on('messageReactionAdd', (reaction, user) =>{
     }
   }
   let rm = reaction.message
-  console.log(userchoice)
   if(userchoice != undefined) LogicAndStuff(rm, userchoice)
 })
 
 async function setupmessage(message){
+  orginalid = message.author;
+  session = true
   rpsm = await message.channel.send('Rock, Paper, Or Scissors?')
   rpsm.react('🗿');
   rpsm.react('📄');
@@ -60,7 +60,6 @@ async function setupmessage(message){
 function LogicAndStuff(rm, userchoice){
   let message = rm;
   let win;
-  console.log(botchoice)
   if(botchoice == userchoice){
     win = 't';
   }
@@ -104,6 +103,7 @@ function LogicAndStuff(rm, userchoice){
     message.channel.send(intToEmoji(userchoice) + '🤛' + intToEmoji(botchoice))
     message.channel.send('You loose :regional_indicator_l:')
   }
+  session = false;
 }
 
 function intToEmoji(i){
