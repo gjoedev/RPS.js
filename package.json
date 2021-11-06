@@ -1,0 +1,14 @@
+{
+  "name": "rpsjs",
+  "version": "1.0.0",
+  "description": "RPS discord bot in JS",
+  "main": "index.js",
+  "dependencies": {
+    "discord.js": "^13.3.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "gjoedev",
+  "license": "ISC"
+}
